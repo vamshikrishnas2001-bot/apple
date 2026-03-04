@@ -12,7 +12,6 @@ font-family:monospace;
 margin:0;
 display:flex;
 height:100vh;
-cursor:pointer;
 }
 
 #left{
@@ -24,10 +23,11 @@ padding:30px;
 width:40%;
 border-left:2px solid #00ff00;
 padding:30px;
+overflow:auto;
 }
 
 #terminal{
-height:60%;
+height:40%;
 overflow:auto;
 white-space:pre-line;
 }
@@ -52,6 +52,19 @@ background:#00ff00;
 canvas{
 background:#000;
 border:1px solid #00ff00;
+margin-bottom:20px;
+}
+
+img{
+width:100%;
+border:1px solid #00ff00;
+margin-top:10px;
+}
+
+video{
+width:100%;
+border:1px solid #00ff00;
+margin-top:10px;
 }
 
 </style>
@@ -59,8 +72,7 @@ border:1px solid #00ff00;
 
 <body>
 
-<!-- Sound -->
-<audio id="scanSound" loop>
+<audio autoplay loop>
 <source src="scan.mp3" type="audio/mpeg">
 </audio>
 
@@ -79,8 +91,15 @@ border:1px solid #00ff00;
 <div id="right">
 
 <h3>Live System Graph</h3>
-
 <canvas id="graph" width="400" height="200"></canvas>
+
+<h3>Image Analysis</h3>
+<img id="analysisImage" src="img1.jpg">
+
+<h3>Video Monitoring</h3>
+<video autoplay muted loop>
+<source src="video.mp4" type="video/mp4">
+</video>
 
 </div>
 
@@ -161,13 +180,7 @@ setTimeout(runScan,120);
 runScan();
 
 
-// Play sound when user clicks page
-document.body.addEventListener("click", function(){
-document.getElementById("scanSound").play();
-}, {once:true});
-
-
-// Live graph
+// Graph
 
 let canvas = document.getElementById("graph");
 let ctx = canvas.getContext("2d");
@@ -199,6 +212,27 @@ requestAnimationFrame(updateGraph);
 }
 
 updateGraph();
+
+
+// Image rotation
+
+let images = ["img1.jpg","img2.jpg","img3.jpg"];
+
+let imgIndex = 0;
+
+function changeImage(){
+
+imgIndex++;
+
+if(imgIndex >= images.length){
+imgIndex = 0;
+}
+
+document.getElementById("analysisImage").src = images[imgIndex];
+
+}
+
+setInterval(changeImage,3000);
 
 </script>
 
