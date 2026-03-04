@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI System Analyzer</title>
+
+<style>
+
+body{
+background:black;
+color:#00ff00;
+font-family:monospace;
+margin:0;
+display:flex;
+height:100vh;
+cursor:pointer;
+}
+
+#left{
+width:60%;
+padding:30px;
+}
+
+#right{
+width:40%;
+border-left:2px solid #00ff00;
+padding:30px;
+}
+
+#terminal{
+height:60%;
+overflow:auto;
+white-space:pre-line;
+}
+
+.alert{
+color:red;
+font-weight:bold;
+}
+
+#progressBox{
+width:100%;
+background:#222;
+margin-top:10px;
+}
+
+#progress{
+height:20px;
+width:0%;
+background:#00ff00;
+}
+
+canvas{
+background:#000;
+border:1px solid #00ff00;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Sound -->
+<audio id="scanSound" loop>
+<source src="scan.mp3" type="audio/mpeg">
+</audio>
+
+<div id="left">
+
+<h2>AI System Analysis</h2>
+
+<div id="progressBox">
+<div id="progress"></div>
+</div>
+
+<div id="terminal"></div>
+
+</div>
+
+<div id="right">
+
+<h3>Live System Graph</h3>
+
+<canvas id="graph" width="400" height="200"></canvas>
+
+</div>
+
+<script>
+
+let terminal = document.getElementById("terminal");
+
+let lines = [
+"AI engine initialized...",
+"Loading neural analysis module...",
+"Scanning system directories...",
+"Analyzing running processes...",
+"Monitoring network traffic...",
+"Building AI model...",
+"Generating system report..."
+];
+
+let alerts = [
+"⚠ Suspicious packet detected",
+"⚠ Unknown device attempting connection",
+"⚠ Firewall rule updated"
+];
+
+let progress = 0;
+let lineIndex = 0;
+
+function typeLine(text,i=0){
+
+if(i < text.length){
+
+terminal.innerHTML += text[i];
+
+setTimeout(()=>typeLine(text,i+1),30);
+
+}
+else{
+
+terminal.innerHTML += "\n";
+
+}
+
+}
+
+function showAlert(){
+
+let alertMsg = alerts[Math.floor(Math.random()*alerts.length)];
+
+terminal.innerHTML += "<span class='alert'>" + alertMsg + "</span>\n";
+
+}
+
+function runScan(){
+
+if(progress <= 100){
+
+document.getElementById("progress").style.width = progress+"%";
+
+if(progress % 15 === 0 && lineIndex < lines.length){
+
+typeLine(lines[lineIndex]);
+
+lineIndex++;
+
+}
+
+if(progress % 25 === 0){
+showAlert();
+}
+
+progress++;
+
+setTimeout(runScan,120);
+
+}
+
+}
+
+runScan();
+
+
+// Play sound when user clicks page
+document.body.addEventListener("click", function(){
+document.getElementById("scanSound").play();
+}, {once:true});
+
+
+// Live graph
+
+let canvas = document.getElementById("graph");
+let ctx = canvas.getContext("2d");
+
+let values = [];
+
+function updateGraph(){
+
+if(values.length > 50) values.shift();
+
+values.push(Math.random()*200);
+
+ctx.clearRect(0,0,400,200);
+
+ctx.beginPath();
+
+for(let i=0;i<values.length;i++){
+
+ctx.lineTo(i*8,200-values[i]);
+
+}
+
+ctx.strokeStyle="#00ff00";
+
+ctx.stroke();
+
+requestAnimationFrame(updateGraph);
+
+}
+
+updateGraph();
+
+</script>
+
+</body>
+</html>
